@@ -1,8 +1,8 @@
-package users.model_users.repository;
+package users.model_users.repositories;
 
 import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<Long, User> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
 }
