@@ -17,6 +17,13 @@ public class UserService implements IUserService {
     private UserRepository userRepository;
 
     @Override
+    @Transactional
+    public User saveUser(User user) {
+        return userRepository.save(user);
+
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<User> findAll() {
 
@@ -27,13 +34,6 @@ public class UserService implements IUserService {
     @Transactional(readOnly = true)
     public Optional<User> byId(Long id) {
         return userRepository.findById(id);
-
-    }
-
-    @Override
-    @Transactional
-    public User saveUser(User user) {
-        return userRepository.save(user);
 
     }
 
