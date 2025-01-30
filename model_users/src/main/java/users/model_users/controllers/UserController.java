@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import users.model_users.services.UserService;
@@ -38,4 +41,25 @@ public class UserController {
 
     }
 
+    @PostMapping
+    public ResponseEntity<User> create(@RequestBody User user) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(user));
+
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> update(@RequestBody User user, @PathVariable Long id) {
+
+        Optional<User> userId = userService.byId(id);
+
+        if (userId.isPresent()) {
+            User userDb = userId.get();
+            userDb.setName(user.getName());
+            userDb.setPassword(user.getPassword());
+            userDb.setRoles(user.getRoles());
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.saveUser(userDb));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
+    }
 }
