@@ -1,11 +1,14 @@
 package model_courses.model_courses.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import model_courses.model_courses.domail.models.Course;
 import model_courses.model_courses.services.CourseService;
-
 
 @RestController
 @RequestMapping("/api/v1/course")
@@ -47,13 +49,22 @@ public class CourseController {
     }
 
     @PostMapping
-    public ResponseEntity<Course> create(@RequestBody @Valid Course user) {
+    public ResponseEntity<?> create(@RequestBody @Valid Course user, BindingResult result) {
+        if (result.hasErrors()) {
+            return getErrors(result);
+
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(courseService.saveUser(user));
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Course> update(@RequestBody Course user, @PathVariable Long id) {
+    public ResponseEntity<?> update(@RequestBody Course user, BindingResult result, @PathVariable Long id) {
+
+        if (result.hasErrors()) {
+            return getErrors(result);
+
+        }
 
         Optional<Course> userId = courseService.byId(id);
 
@@ -74,5 +85,15 @@ public class CourseController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    private ResponseEntity<?> getErrors(BindingResult result) {
+        Map<String, String> errors = new HashMap<>();
+
+        result.getFieldErrors().forEach(e -> {
+            errors.put(e.getField(), "This field: " + e.getField() + " is not empty");
+        });
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
     }
 }

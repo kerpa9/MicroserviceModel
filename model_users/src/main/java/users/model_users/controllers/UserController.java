@@ -1,11 +1,14 @@
 package users.model_users.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,13 +49,25 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody @Valid User user) {
+    public ResponseEntity<?> create(@RequestBody @Valid User user, BindingResult result) {
+
+        if (result.hasErrors()) {
+
+            return getErrors(result);
+
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(user));
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@RequestBody User user, @PathVariable Long id) {
+    public ResponseEntity<?> update(@RequestBody @Valid User user, BindingResult result, @PathVariable @Valid Long id) {
+
+        if (result.hasErrors()) {
+
+            return getErrors(result);
+
+        }
 
         Optional<User> userId = userService.byId(id);
 
@@ -66,13 +81,25 @@ public class UserController {
 
     }
 
+  
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleted(@PathVariable Long id) {
+    public ResponseEntity<User> deleted(@PathVariable @Valid Long id) {
         Optional<User> userId = userService.byId(id);
         if (userId.isPresent()) {
             userService.delete(id);
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    private ResponseEntity<?> getErrors(BindingResult result) {
+        Map<String, String> errors = new HashMap<>();
+
+        result.getFieldErrors().forEach(e -> {
+            errors.put(e.getField(), "This field: " + e.getField() + " is not empty");
+        });
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
     }
 }
