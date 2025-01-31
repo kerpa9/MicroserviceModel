@@ -1,4 +1,4 @@
-package users.model_courses.controllers;
+package model_courses.model_courses.controllers;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,24 +16,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import model_courses.model_courses.domail.models.Course;
+import model_courses.model_courses.services.CourseService;
+
 
 @RestController
 @RequestMapping("/api/v1/user")
 public class CourseController {
 
     @Autowired
-    private UserService userService;
+    private CourseService courseService;
 
     @GetMapping
     public List<Course> getAllUser() {
 
-        return userService.findAll();
+        return courseService.findAll();
 
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Course> getById(@PathVariable Long id) {
-        Optional<Course> user = userService.byId(id);
+        Optional<Course> user = courseService.byId(id);
 
         if (user.isPresent()) {
             return ResponseEntity.status(HttpStatus.FOUND).body(user.get());
@@ -45,20 +48,19 @@ public class CourseController {
 
     @PostMapping
     public ResponseEntity<Course> create(@RequestBody @Valid Course user) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(courseService.saveUser(user));
 
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Course> update(@RequestBody Course user, @PathVariable Long id) {
 
-        Optional<Course> userId = userService.byId(id);
+        Optional<Course> userId = courseService.byId(id);
 
         if (userId.isPresent()) {
             Course userDb = userId.get();
             userDb.setName(user.getName());
-            userDb.setPassword(user.getPassword());
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.saveUser(userDb));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(courseService.saveUser(userDb));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 
@@ -66,9 +68,9 @@ public class CourseController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Course> deleted(@PathVariable Long id) {
-        Optional<Course> userId = userService.byId(id);
+        Optional<Course> userId = courseService.byId(id);
         if (userId.isPresent()) {
-            userService.delete(id);
+            courseService.delete(id);
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();

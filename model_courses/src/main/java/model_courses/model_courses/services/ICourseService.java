@@ -1,11 +1,8 @@
-package users.model_users.services;
-
+package model_courses.model_courses.services;
 import java.util.List;
 import java.util.Optional;
 
-import users.model_users.domail.models.Course;
-
-
+import model_courses.model_courses.domail.models.Course;
 public interface ICourseService {
 
     List<Course> findAll();

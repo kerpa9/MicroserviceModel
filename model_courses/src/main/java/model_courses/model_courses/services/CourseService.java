@@ -1,4 +1,4 @@
-package users.model_courses.services;
+package model_courses.model_courses.services;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,8 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import users.model_users.domail.models.Course;
-import users.model_users.repositories.UserRepository;
+import model_courses.model_courses.domail.models.Course;
+import model_courses.model_courses.repositories.CourseRepository;
+
 
 
 @Service
@@ -19,7 +20,7 @@ public class CourseService implements ICourseService {
 
     @Override
     @Transactional
-    public User saveUser(Course course) {
+    public Course saveUser(Course course) {
         return courseRepository.save(course);
 
     }
