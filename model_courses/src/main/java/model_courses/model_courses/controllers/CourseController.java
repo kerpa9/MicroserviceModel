@@ -21,7 +21,7 @@ import model_courses.model_courses.services.CourseService;
 
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/course")
 public class CourseController {
 
     @Autowired
