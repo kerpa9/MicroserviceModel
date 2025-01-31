@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import users.model_users.domail.models.User;
 import users.model_users.repositories.UserRepository;
+
 
 @Service
 public class UserService implements IUserService {
@@ -42,6 +43,8 @@ public class UserService implements IUserService {
     public void delete(Long id) {
         userRepository.deleteById(id);
     }
+
+    
 
 
 }

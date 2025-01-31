@@ -3,7 +3,8 @@ package users.model_users.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+import users.model_users.domail.models.User;
+
 
 public interface IUserService {
 
