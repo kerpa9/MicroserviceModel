@@ -18,6 +18,7 @@
 
     <modules>
         <module>model_users</module>
+        <module>model_courses</module>
     </modules>
 
     <properties>
