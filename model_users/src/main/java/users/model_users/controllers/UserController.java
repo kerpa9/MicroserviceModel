@@ -51,6 +51,11 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody @Valid User user, BindingResult result) {
 
+        if (userService.findByEmail(user.getEmail()).isPresent()) {
+            return validate(result);
+
+        }
+
         if (result.hasErrors()) {
 
             return getErrors(result);
@@ -81,8 +86,6 @@ public class UserController {
 
     }
 
-  
-
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleted(@PathVariable @Valid Long id) {
         Optional<User> userId = userService.byId(id);
@@ -101,5 +104,14 @@ public class UserController {
         });
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
+    }
+
+    private ResponseEntity<Map<String, String>> validate(BindingResult result) {
+        Map<String, String> errors = new HashMap<>();
+        result.getFieldErrors().forEach(err -> {
+            errors.put(err.getField(), "This field: " + err.getField() + "is not empty");
+        });
+
+        return ResponseEntity.badRequest().body(errors);
     }
 }

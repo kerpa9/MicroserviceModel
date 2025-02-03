@@ -44,6 +44,11 @@ public class UserService implements IUserService {
         userRepository.deleteById(id);
     }
 
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     
 
 

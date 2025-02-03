@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import users.model_users.domail.models.User;
 
-
 public interface IUserService {
 
     List<User> findAll();
@@ -15,5 +14,7 @@ public interface IUserService {
     User saveUser(User user);
 
     void delete(Long id);
+
+    Optional<User> findByEmail(String email);
 
 }
