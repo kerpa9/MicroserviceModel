@@ -52,16 +52,15 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody @Valid User user, BindingResult result) {
 
+        if (result.hasErrors()) {
+            return getErrors(result);
+        }
+
         if (!user.getEmail().isEmpty() && userService.findByEmail(user.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message: ", "Already exists email"));
-
         }
 
-        if (result.hasErrors()) {
-
-            return getErrors(result);
-
-        }
+        
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(user));
 
     }
@@ -111,14 +110,4 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
     }
-
-    // private ResponseEntity<Map<String, String>> validate(BindingResult result) {
-    // Map<String, String> errors = new HashMap<>();
-    // result.getFieldErrors().forEach(err -> {
-    // errors.put(err.getField(), "This field: " + err.getField() + "is not empty: "
-    // + err.getDefaultMessage());
-    // });
-
-    // return ResponseEntity.badRequest().body(errors);
-    // }
 }
