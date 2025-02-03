@@ -1,5 +1,6 @@
 package users.model_users.controllers;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,8 +52,8 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody @Valid User user, BindingResult result) {
 
-        if (userService.findByEmail(user.getEmail()).isPresent()) {
-            return validate(result);
+        if (!user.getEmail().isEmpty() && userService.findByEmail(user.getEmail()).isPresent()) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message: ", "Already exists email"));
 
         }
 
@@ -69,20 +70,25 @@ public class UserController {
     public ResponseEntity<?> update(@RequestBody @Valid User user, BindingResult result, @PathVariable @Valid Long id) {
 
         if (result.hasErrors()) {
-
             return getErrors(result);
-
         }
 
         Optional<User> userId = userService.byId(id);
 
         if (userId.isPresent()) {
+
             User userDb = userId.get();
+
+            if (!user.getEmail().equalsIgnoreCase(userDb.getEmail())
+                    && userService.findByEmail(user.getEmail()).isPresent()) {
+                return ResponseEntity.badRequest().body(Collections.singletonMap("message: ", "Already exist email"));
+            }
             userDb.setName(user.getName());
             userDb.setPassword(user.getPassword());
+            userDb.setEmail(user.getEmail());
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.saveUser(userDb));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        return ResponseEntity.notFound().build();
 
     }
 
@@ -106,12 +112,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
     }
 
-    private ResponseEntity<Map<String, String>> validate(BindingResult result) {
-        Map<String, String> errors = new HashMap<>();
-        result.getFieldErrors().forEach(err -> {
-            errors.put(err.getField(), "This field: " + err.getField() + "is not empty");
-        });
+    // private ResponseEntity<Map<String, String>> validate(BindingResult result) {
+    // Map<String, String> errors = new HashMap<>();
+    // result.getFieldErrors().forEach(err -> {
+    // errors.put(err.getField(), "This field: " + err.getField() + "is not empty: "
+    // + err.getDefaultMessage());
+    // });
 
-        return ResponseEntity.badRequest().body(errors);
-    }
+    // return ResponseEntity.badRequest().body(errors);
+    // }
 }
