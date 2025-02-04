@@ -11,10 +11,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import model_courses.model_courses.domail.Users;
 
 @Entity
 @Table(name = "course")
@@ -32,6 +34,9 @@ public class Course {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
     private List<CourseUsers> course_users;
+
+    @Transient
+    private List<Users> users;
 
     public void addCourseUsers(CourseUsers courseUsers) {
         course_users.add(courseUsers);

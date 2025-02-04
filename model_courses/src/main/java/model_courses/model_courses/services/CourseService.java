@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import model_courses.model_courses.domail.Users;
 import model_courses.model_courses.domail.models.Course;
 import model_courses.model_courses.repositories.CourseRepository;
 
@@ -43,6 +44,24 @@ public class CourseService implements ICourseService {
     @Transactional
     public void delete(Long id) {
         courseRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Users> insertUser(Users user, Long id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'insertUser'");
+    }
+
+    @Override
+    public Optional<Users> createUser(Users user, Long id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'createUser'");
+    }
+
+    @Override
+    public Optional<Users> unsignedUser(Users user, Long id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'unsignedUser'");
     }
 
     
