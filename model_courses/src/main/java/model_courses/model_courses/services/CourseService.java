@@ -7,14 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import model_courses.model_courses.clients.IUserClientRest;
 import model_courses.model_courses.domail.Users;
 import model_courses.model_courses.domail.models.Course;
 import model_courses.model_courses.repositories.CourseRepository;
 
-
-
 @Service
 public class CourseService implements ICourseService {
+
+    @Autowired
+    private IUserClientRest clientRest;
 
     @Autowired
     private CourseRepository courseRepository;
@@ -63,8 +65,5 @@ public class CourseService implements ICourseService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'unsignedUser'");
     }
-
-    
-
 
 }
