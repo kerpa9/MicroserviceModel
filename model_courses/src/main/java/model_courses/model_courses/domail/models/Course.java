@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import model_courses.model_courses.domail.Users;
@@ -21,6 +22,7 @@ import model_courses.model_courses.domail.Users;
 @Table(name = "course")
 @Getter
 @Setter
+@AllArgsConstructor
 public class Course {
 
     @Id

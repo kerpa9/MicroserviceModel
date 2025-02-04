@@ -36,7 +36,7 @@ public class CourseUsers {
             return false;
         CourseUsers user = (CourseUsers) obj;
 
-        return this.userId != null && this.userId.equals(user.getUserId());
+        return this.userId != null && this.userId.equals(user.userId);
 
     }
 

@@ -50,10 +50,11 @@ public class CourseService implements ICourseService {
     }
 
     @Override
+    @Transactional
     public Optional<Users> insertUser(Users user, Long id) {
         Optional<Course> course = courseRepository.findById(id);
         if (course.isPresent()) {
-            Users userResponse = clientRest.detail(user.getId());
+            Users userResponse = clientRest.getById(user.getId());
 
             Course courseResponse = course.get();
             CourseUsers courseUsers = new CourseUsers();
@@ -62,7 +63,8 @@ public class CourseService implements ICourseService {
             courseRepository.save(courseResponse);
             return Optional.of(userResponse);
         }
-        return Optional.empty();
+         return Optional.empty();
+
     }
 
     @Override
@@ -87,7 +89,7 @@ public class CourseService implements ICourseService {
     public Optional<Users> unsignedUser(Users user, Long id) {
         Optional<Course> course = courseRepository.findById(id);
         if (course.isPresent()) {
-            Users userResponse = clientRest.detail(user.getId());
+            Users userResponse = clientRest.getById(user.getId());
 
             Course courseResponse = course.get();
             CourseUsers courseUsers = new CourseUsers();

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+// import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import feign.FeignException;
@@ -26,7 +26,7 @@ import model_courses.model_courses.domail.models.Course;
 import model_courses.model_courses.services.CourseService;
 
 @RestController
-@RequestMapping("/api/v1/course")
+// @RequestMapping("/api")
 public class CourseController {
 
     @Autowired
@@ -90,14 +90,14 @@ public class CourseController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/signed-user/{courseId}")
-    ResponseEntity<?> signedUser(@RequestBody Users users, @PathVariable Long courseId) {
+    @PutMapping("/signed-user/{id}")
+    public ResponseEntity<?> signedUser(@RequestBody Users users, @PathVariable Long id) {
 
         Optional<Users> courseSign;
 
         try {
 
-            courseSign = courseService.insertUser(users, courseId);
+            courseSign = courseService.insertUser(users, id);
 
         } catch (FeignException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -111,14 +111,14 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
-    @PostMapping("/create-user/{courseId}")
-    ResponseEntity<?> createUser(@RequestBody Users users, @PathVariable Long courseId) {
+    @PostMapping("/create-user/{id}")
+    ResponseEntity<?> createUser(@RequestBody Users users, @PathVariable Long id) {
 
-        Optional<Users> courseSign = null;
+        Optional<Users> courseSign;
 
         try {
 
-            courseSign = courseService.createUser(users, courseId);
+            courseSign = courseService.createUser(users, id);
 
         } catch (FeignException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -132,14 +132,14 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
-    @DeleteMapping("/delete-user/{courseId}")
-    ResponseEntity<?> deleteUser(@RequestBody Users users, @PathVariable Long courseId) {
+    @DeleteMapping("/delete-user/{id}")
+    ResponseEntity<?> deleteUser(@RequestBody Users users, @PathVariable Long id) {
 
-        Optional<Users> courseSign = null;
+        Optional<Users> courseSign;
 
         try {
 
-            courseSign = courseService.unsignedUser(users, courseId);
+            courseSign = courseService.unsignedUser(users, id);
 
         } catch (FeignException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

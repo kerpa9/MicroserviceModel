@@ -1,10 +1,8 @@
 package model_courses.model_courses.domail;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class Users {
 
     private Long id;
