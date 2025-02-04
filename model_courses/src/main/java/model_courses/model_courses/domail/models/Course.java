@@ -1,5 +1,6 @@
 package model_courses.model_courses.domail.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -12,16 +13,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import model_courses.model_courses.domail.Users;
 
 @Entity
 @Table(name = "course")
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class Course {
@@ -37,6 +34,11 @@ public class Course {
 
     @Transient
     private List<Users> users;
+
+    public Course() {
+        course_users = new ArrayList<>();
+        users = new ArrayList<>();
+    }
 
     public void addCourseUsers(CourseUsers courseUsers) {
         course_users.add(courseUsers);

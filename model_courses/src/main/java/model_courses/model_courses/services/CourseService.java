@@ -66,15 +66,37 @@ public class CourseService implements ICourseService {
     }
 
     @Override
+    @Transactional
     public Optional<Users> createUser(Users user, Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createUser'");
+        Optional<Course> course = courseRepository.findById(id);
+        if (course.isPresent()) {
+            Users userResponse = clientRest.create(user);
+
+            Course courseResponse = course.get();
+            CourseUsers courseUsers = new CourseUsers();
+            courseUsers.setUserId(userResponse.getId());
+            courseResponse.addCourseUsers(courseUsers);
+            courseRepository.save(courseResponse);
+            return Optional.of(userResponse);
+        }
+        return Optional.empty();
     }
 
     @Override
+    @Transactional
     public Optional<Users> unsignedUser(Users user, Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'unsignedUser'");
+        Optional<Course> course = courseRepository.findById(id);
+        if (course.isPresent()) {
+            Users userResponse = clientRest.detail(user.getId());
+
+            Course courseResponse = course.get();
+            CourseUsers courseUsers = new CourseUsers();
+            courseUsers.setUserId(userResponse.getId());
+            courseResponse.removeCourseUser(courseUsers);
+            courseRepository.delete(courseResponse);
+            return Optional.of(userResponse);
+        }
+        return Optional.empty();
     }
 
 }

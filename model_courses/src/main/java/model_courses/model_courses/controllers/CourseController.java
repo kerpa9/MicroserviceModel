@@ -1,5 +1,6 @@
 package model_courses.model_courses.controllers;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import feign.FeignException;
 import jakarta.validation.Valid;
+import model_courses.model_courses.domail.Users;
 import model_courses.model_courses.domail.models.Course;
 import model_courses.model_courses.services.CourseService;
 
@@ -86,6 +89,71 @@ public class CourseController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @PutMapping("/signed-user/{courseId}")
+    ResponseEntity<?> signedUser(@RequestBody Users users, @PathVariable Long courseId) {
+
+        Optional<Users> courseSign;
+
+        try {
+
+            courseSign = courseService.insertUser(users, courseId);
+
+        } catch (FeignException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message: ", "User not found"));
+        }
+
+        if (courseSign.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(courseSign.get());
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    @PostMapping("/create-user/{courseId}")
+    ResponseEntity<?> createUser(@RequestBody Users users, @PathVariable Long courseId) {
+
+        Optional<Users> courseSign = null;
+
+        try {
+
+            courseSign = courseService.createUser(users, courseId);
+
+        } catch (FeignException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message: ", "User not found"));
+        }
+
+        if (courseSign.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(courseSign.get());
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    @DeleteMapping("/delete-user/{courseId}")
+    ResponseEntity<?> deleteUser(@RequestBody Users users, @PathVariable Long courseId) {
+
+        Optional<Users> courseSign = null;
+
+        try {
+
+            courseSign = courseService.unsignedUser(users, courseId);
+
+        } catch (FeignException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message: ", "User not found"));
+        }
+
+        if (courseSign.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(courseSign.get());
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    
 
     private ResponseEntity<?> getErrors(BindingResult result) {
         Map<String, String> errors = new HashMap<>();
