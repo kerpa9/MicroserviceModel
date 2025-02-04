@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import model_courses.model_courses.clients.IUserClientRest;
 import model_courses.model_courses.domail.Users;
 import model_courses.model_courses.domail.models.Course;
+import model_courses.model_courses.domail.models.CourseUsers;
 import model_courses.model_courses.repositories.CourseRepository;
 
 @Service
@@ -50,8 +51,18 @@ public class CourseService implements ICourseService {
 
     @Override
     public Optional<Users> insertUser(Users user, Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insertUser'");
+        Optional<Course> course = courseRepository.findById(id);
+        if (course.isPresent()) {
+            Users userResponse = clientRest.detail(user.getId());
+
+            Course courseResponse = course.get();
+            CourseUsers courseUsers = new CourseUsers();
+            courseUsers.setUserId(userResponse.getId());
+            courseResponse.addCourseUsers(courseUsers);
+            courseRepository.save(courseResponse);
+            return Optional.of(userResponse);
+        }
+        return Optional.empty();
     }
 
     @Override
