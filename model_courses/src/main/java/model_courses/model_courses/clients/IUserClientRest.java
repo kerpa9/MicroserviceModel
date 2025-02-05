@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import model_courses.model_courses.domail.Users;
 
-@FeignClient(name = "model-users", url = "localhost:3000")
+@FeignClient(name = "model-users", url = "http://localhost:3000")
 public interface IUserClientRest {
 
     @GetMapping("/{id}")

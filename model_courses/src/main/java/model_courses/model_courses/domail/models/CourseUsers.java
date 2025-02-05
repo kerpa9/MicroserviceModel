@@ -23,9 +23,8 @@ public class CourseUsers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="user_id", unique = true)
+    @Column(name = "user_id", unique = true)
     private Long userId;
-
 
     @Override
     public boolean equals(Object obj) {
@@ -37,7 +36,11 @@ public class CourseUsers {
         CourseUsers user = (CourseUsers) obj;
 
         return this.userId != null && this.userId.equals(user.userId);
+    }
 
+    @Override
+    public int hashCode() {
+        return userId != null ? userId.hashCode() : 0;
     }
 
 }

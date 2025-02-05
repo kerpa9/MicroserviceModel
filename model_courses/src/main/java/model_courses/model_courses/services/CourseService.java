@@ -51,20 +51,25 @@ public class CourseService implements ICourseService {
 
     @Override
     @Transactional
-    public Optional<Users> insertUser(Users user, Long id) {
-        Optional<Course> course = courseRepository.findById(id);
+    public Optional<Users> insertUser(Users user, Long courseId) {
+        Optional<Course> course = courseRepository.findById(courseId);
         if (course.isPresent()) {
             Users userResponse = clientRest.getById(user.getId());
-
+            
             Course courseResponse = course.get();
             CourseUsers courseUsers = new CourseUsers();
             courseUsers.setUserId(userResponse.getId());
-            courseResponse.addCourseUsers(courseUsers);
-            courseRepository.save(courseResponse);
-            return Optional.of(userResponse);
+            
+            boolean userExists = courseResponse.getCourse_users().stream()
+                .anyMatch(cu -> cu.getUserId().equals(userResponse.getId()));
+                
+            if (!userExists) {
+                courseResponse.addCourseUsers(courseUsers);
+                courseRepository.save(courseResponse);
+                return Optional.of(userResponse);
+            }
         }
-         return Optional.empty();
-
+        return Optional.empty();
     }
 
     @Override

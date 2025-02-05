@@ -47,7 +47,14 @@ public class Course {
     }
 
     public void removeCourseUser(CourseUsers courseUsers) {
-        course_users.remove(courseUsers);
+        CourseUsers userToRemove = course_users.stream()
+            .filter(cu -> cu.getUserId().equals(courseUsers.getUserId()))
+            .findFirst()
+            .orElse(null);
+        
+        if (userToRemove != null) {
+            course_users.remove(userToRemove);
+        }
     }
 
 }
