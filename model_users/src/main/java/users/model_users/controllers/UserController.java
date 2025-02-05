@@ -40,7 +40,7 @@ public class UserController {
         Optional<User> user = userService.byId(id);
 
         if (user.isPresent()) {
-            return ResponseEntity.status(HttpStatus.FOUND).body(user.get());
+            return ResponseEntity.status(HttpStatus.OK).body(user.get());
         }
 
         return ResponseEntity.notFound().build();
