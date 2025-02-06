@@ -153,7 +153,7 @@ public class CourseController {
 
     @DeleteMapping("/delete-userC/{id}")
     public ResponseEntity<?> deleteCourseUser(@PathVariable Long id) {
-        courseService.deleteById(id);
+        courseService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
