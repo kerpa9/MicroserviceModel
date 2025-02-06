@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import users.model_users.domail.models.User;
 import users.model_users.repositories.UserRepository;
 
-
 @Service
 public class UserService implements IUserService {
 
@@ -49,7 +48,10 @@ public class UserService implements IUserService {
         return userRepository.findByEmail(email);
     }
 
-    
+    @Override
+    public List<User> listByIds(Iterable<Long> ids) {
+        return (List<User>) userRepository.findAllById(ids);
 
+    }
 
 }

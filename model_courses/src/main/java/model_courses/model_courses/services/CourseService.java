@@ -53,16 +53,16 @@ public class CourseService implements ICourseService {
     @Transactional
     public Optional<Users> insertUser(Users user, Long id) {
         Optional<Course> course = courseRepository.findById(id);
-        if (course.isPresent()) { 
+        if (course.isPresent()) {
             Users userResponse = clientRest.getById(user.getId());
-            
+
             Course courseResponse = course.get();
             CourseUsers courseUsers = new CourseUsers();
             courseUsers.setUserId(userResponse.getId());
-            
+
             boolean userExists = courseResponse.getCourse_users().stream()
-                .anyMatch(cu -> cu.getUserId().equals(userResponse.getId()));
-                
+                    .anyMatch(cu -> cu.getUserId().equals(userResponse.getId()));
+
             if (!userExists) {
                 courseResponse.addCourseUsers(courseUsers);
                 courseRepository.save(courseResponse);
@@ -95,22 +95,39 @@ public class CourseService implements ICourseService {
         Optional<Course> course = courseRepository.findById(id);
         if (course.isPresent()) {
             Users userResponse = clientRest.getById(user.getId());
-            
+
             Course courseResponse = course.get();
-            
+
             boolean userExists = courseResponse.getCourse_users().stream()
-                .anyMatch(cu -> cu.getUserId().equals(userResponse.getId()));
-                
+                    .anyMatch(cu -> cu.getUserId().equals(userResponse.getId()));
+
             if (userExists) {
                 CourseUsers courseUsers = new CourseUsers();
                 courseUsers.setUserId(userResponse.getId());
                 courseResponse.removeCourseUser(courseUsers);
-                courseRepository.save(courseResponse);  
+                courseRepository.save(courseResponse);
                 return Optional.of(userResponse);
             }
         }
         return Optional.empty();
     }
-    
+
+    @Override
+    public Optional<Course> byIds(Long id) {
+        Optional<Course> courseDb = courseRepository.findById(id);
+        if (courseDb.isPresent()) {
+            Course course = courseDb.get();
+
+            if (!course.getCourse_users().isEmpty()) {
+                List<Long> ids = course.getCourse_users().stream().map(CourseUsers::getUserId).toList();
+
+                List<Users> users = clientRest.usersByCourse(ids);
+                course.setUsers(users);
+            }
+
+            return Optional.of(course);
+        }
+        return Optional.empty();
+    }
 
 }

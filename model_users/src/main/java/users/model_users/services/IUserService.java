@@ -17,4 +17,6 @@ public interface IUserService {
 
     Optional<User> findByEmail(String email);
 
+    List<User> listByIds(Iterable<Long> ids);
+
 }

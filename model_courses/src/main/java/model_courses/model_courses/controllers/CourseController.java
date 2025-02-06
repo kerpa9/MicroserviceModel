@@ -39,7 +39,7 @@ public class CourseController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Course> getById(@PathVariable Long id) {
-        Optional<Course> user = courseService.byId(id);
+        Optional<Course> user = courseService.byIds(id);
 
         if (user.isPresent()) {
             return ResponseEntity.status(HttpStatus.FOUND).body(user.get());

@@ -11,14 +11,15 @@ public interface ICourseService {
     List<Course> findAll();
 
     Optional<Course> byId(Long id);
-
+    
     Course saveUser(Course user);
-
+    
     void delete(Long id);
-
+    
     Optional<Users> insertUser(Users user, Long id);
     Optional<Users> createUser(Users user, Long id);    
     Optional<Users> unsignedUser(Users user, Long id);
+    Optional<Course> byIds(Long id);
 
 
 }
