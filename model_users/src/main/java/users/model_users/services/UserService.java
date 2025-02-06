@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import users.model_users.clients.ICourseClientsRest;
 import users.model_users.domail.models.User;
 import users.model_users.repositories.UserRepository;
 
@@ -15,6 +16,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ICourseClientsRest courseClientsRest;
 
     @Override
     @Transactional
@@ -41,6 +45,7 @@ public class UserService implements IUserService {
     @Transactional
     public void delete(Long id) {
         userRepository.deleteById(id);
+        courseClientsRest.deleteCourseUser(id);
     }
 
     @Override

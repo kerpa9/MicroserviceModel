@@ -113,7 +113,7 @@ public class CourseService implements ICourseService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Optional<Course> byIds(Long id) {
         Optional<Course> courseDb = courseRepository.findById(id);
         if (courseDb.isPresent()) {
@@ -129,6 +129,13 @@ public class CourseService implements ICourseService {
             return Optional.of(course);
         }
         return Optional.empty();
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        courseRepository.deleteById(id);
+
     }
 
 }

@@ -23,4 +23,7 @@ public interface IUserClientRest {
     @GetMapping("/users")
     List<Users> usersByCourse(@RequestParam Iterable<Long> ids);
 
+
+    
+
 }
