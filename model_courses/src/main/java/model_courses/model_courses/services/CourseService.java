@@ -113,6 +113,7 @@ public class CourseService implements ICourseService {
     }
 
     @Override
+    @Transactional
     public Optional<Course> byIds(Long id) {
         Optional<Course> courseDb = courseRepository.findById(id);
         if (courseDb.isPresent()) {
